@@ -1,0 +1,6 @@
+__pycache__/
+.pyenv*/
+build/
+*.c
+*.so
+*.egg*
