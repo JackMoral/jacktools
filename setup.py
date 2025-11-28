@@ -5,17 +5,24 @@ from glob import glob
 from os import cpu_count
 
 if sys.platform == 'win32':
-    extra_compile_args = ['/O2', '/fp:fast', '/arch:AVX2', '/openmp']
-    extra_link_args = []
+    extra_compile_args = ['/O2', '/fp:fast', '/arch:AVX2', '/openmp', '/Ot', '/GL']
+    extra_link_args = ['/LTCG']
+    normalize_name_sources = lambda x: i.split('.', 1)[0].replace('\\', '.')
 else:
-    extra_compile_args = ['-O3', '-ffast-math', '-march=native', '-fopenmp']
-    extra_link_args = ['-fopenmp']
+    extra_compile_args = [
+        '-O3', '-ffast-math', '-march=native', '-fno-strict-aliasing',
+        '-fopenmp', '-mtune=native', '-fno-wrapv'
+    ]
+    extra_link_args = ['-fopenmp', '-s']
+    normalize_name_sources = lambda x: x.split('.', 1)[0].replace('/', '.')
+
+
 
 setup(
     ext_modules=cythonize(
         [
             Extension(
-                i.split('.', 1)[0].replace('/', '.'), [i],
+                normalize_name_sources(i), [i],
                 extra_compile_args=extra_compile_args,
                 extra_link_args=extra_link_args
             )
