@@ -7,7 +7,7 @@ from os import cpu_count
 if sys.platform == 'win32':
     extra_compile_args = ['/O2', '/fp:fast', '/arch:AVX2', '/openmp', '/Ot', '/GL']
     extra_link_args = ['/LTCG']
-    normalize_name_sources = lambda x: i.split('.', 1)[0].replace('\\', '.')
+    normalize_name_sources = lambda x: x.split('.', 1)[0].replace('\\', '.')
 else:
     extra_compile_args = [
         '-O3', '-ffast-math', '-march=native', '-fno-strict-aliasing',
