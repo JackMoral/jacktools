@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jacktools"
-version = "0.2.0"
+version = "0.2.1"
 description = "Jack's Python/Cython tools and micro-frameworks"
 authors = [{name = "Jack", email = "moraljack2@gmail.com"}]
 readme = "README.md"
