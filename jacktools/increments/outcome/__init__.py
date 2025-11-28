@@ -1,0 +1,1 @@
+from .outcome import OutcomeInt2d

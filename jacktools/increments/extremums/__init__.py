@@ -1,0 +1,1 @@
+from .extremums import ExtremumsInt, ExtremumsDouble

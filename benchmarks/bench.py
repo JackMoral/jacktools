@@ -3,14 +3,13 @@ from argparse import ArgumentParser
 
 def main():
     parser = ArgumentParser(description="JackTools benchmarks")
-    
-    parser.add_argument('--welford_window', action='store_true')
 
+    parser.add_argument('--buffer', action='store_true')
     args = parser.parse_args()
     
-    if args.welford_window:
-        from stats.welford import bench_welford_window
-        bench_welford_window()
+    if args.buffer:
+        from buffer import bench_buffer
+        bench_buffer()
         
 if __name__ == "__main__":
     main()

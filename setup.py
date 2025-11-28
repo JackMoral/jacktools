@@ -1,6 +1,8 @@
 from setuptools import setup, Extension, find_packages
 from Cython.Build import cythonize
 import sys
+from glob import glob
+from os import cpu_count
 
 if sys.platform == 'win32':
     extra_compile_args = ['/O2', '/fp:fast', '/arch:AVX2', '/openmp']
@@ -9,20 +11,16 @@ else:
     extra_compile_args = ['-O3', '-ffast-math', '-march=native', '-fopenmp']
     extra_link_args = ['-fopenmp']
 
-extensions = [
-    Extension(
-        "jacktools.stats.welford.welford_window",  # Полный путь к модулю
-        ["jacktools/stats/welford/welford_window.pyx"],
-        extra_compile_args=extra_compile_args,
-        extra_link_args=extra_link_args,
-        define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION')],
-        language="c"
-    )
-]
-
 setup(
     ext_modules=cythonize(
-        extensions,
+        [
+            Extension(
+                i.split('.', 1)[0].replace('/', '.'), [i],
+                extra_compile_args=extra_compile_args,
+                extra_link_args=extra_link_args
+            )
+            for i in glob('**/*.pyx', recursive=True)
+        ],
         annotate=False,
         compiler_directives={
             'language_level': 3,
@@ -33,7 +31,8 @@ setup(
             'cdivision': True,
             'optimize.use_switch': True,
             'optimize.unpack_method_calls': True,
-        }
+        },
+        nthreads=cpu_count()
     ),
-    zip_safe=False,
+    zip_safe=False
 )
